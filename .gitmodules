@@ -1,0 +1,3 @@
+[submodule "k8s-multi-nodes"]
+	path = k8s-multi-nodes
+	url = git@github.com:phamnam1805/k8s-multi-nodes.git

@@ -1,6 +1,6 @@
 # MongoDB Deployment on Kubernetes
 
-This folder contains configurations for deploying MongoDB on Kubernetes cluster with two different approaches.
+This directory contains configurations for deploying MongoDB on Kubernetes cluster with two different approaches.
 
 ## Overview
 
