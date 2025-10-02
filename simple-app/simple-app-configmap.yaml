@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: simple-app-configmap
+data:
+  port: "3000"
+  video_asset_path: '/app/assets/videos'
