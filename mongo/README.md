@@ -90,6 +90,12 @@ data:
 ### Secret (`mongodb-secret.yaml`)
 Contains sensitive credentials (base64 encoded):
 ```yaml
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mongodb-secret
+type: Opaque
 data:
   mongo_root_username: <base64-encoded-username>
   mongo_root_password: <base64-encoded-password>
