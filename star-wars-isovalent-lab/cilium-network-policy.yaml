@@ -1,0 +1,22 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: deathstar-allow-empire
+  namespace: star-wars
+spec:
+  endpointSelector:
+    matchLabels:
+      class: deathstar
+      org: empire
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            org: empire
+      toPorts:
+        - rules:
+            http:
+              - path: /v1/request-landing
+                method: POST
+          ports:
+            - port: "80"
+              protocol: TCP
