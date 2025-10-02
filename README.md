@@ -67,6 +67,21 @@ Self-signed certificate generation toolkit for TLS learning:
 - Development-ready TLS certificates for learning purposes
 - Compatible with modern security standards and policies
 
+### `star-wars-isovalent-lab/`
+Cilium network policy demonstration using Star Wars themed application:
+
+**Components:**
+- **Star Wars Application** - DeathStar service with TieFighter and X-Wing client pods
+- **Network Policy Examples** - Both Kubernetes and Cilium network policy configurations
+- **Traffic Observability** - Hubble integration for network traffic visualization
+- **Policy Comparisons** - Visual diagrams showing policy enforcement differences
+
+**Features:**
+- Hands-on network policy learning with themed scenario
+- Comparison between Kubernetes and Cilium network policies
+- HTTP-level traffic filtering with Cilium policies
+- Real-time network observability with Hubble UI
+
 ## Learning Goals
 
 This project helps you understand:
