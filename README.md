@@ -53,6 +53,20 @@ Cilium ingress configurations for external access:
 - Cilium-native ingress implementation
 - Advanced load balancing and traffic management
 
+### `self-signed-certs/`
+Self-signed certificate generation toolkit for TLS learning:
+
+**Components:**
+- **Certificate Generation Script** - Automated OpenSSL-based certificate creation
+- **Configuration Templates** - CA, server, and client certificate configurations
+- **Security Best Practices** - ECC curves and proper certificate extensions
+
+**Features:**
+- Complete PKI setup with CA, server, and client certificates
+- Configurable output directory and certificate parameters
+- Development-ready TLS certificates for learning purposes
+- Compatible with modern security standards and policies
+
 ## Learning Goals
 
 This project helps you understand:
