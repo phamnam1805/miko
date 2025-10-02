@@ -1,3 +1,6 @@
 [submodule "k8s-multi-nodes"]
 	path = k8s-multi-nodes
 	url = git@github.com:phamnam1805/k8s-multi-nodes.git
+[submodule "simple-app/simple_app"]
+	path = simple-app/simple_app
+	url = git@github.com:phamnam1805/simple_app.git
