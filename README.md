@@ -67,7 +67,7 @@ Self-signed certificate generation toolkit for TLS learning:
 - Development-ready TLS certificates for learning purposes
 - Compatible with modern security standards and policies
 
-### `star-wars-lab/`
+### `network-policy-lab/`
 Cilium network policy demonstration using Star Wars themed application:
 
 **Components:**
