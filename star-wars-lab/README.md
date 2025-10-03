@@ -6,6 +6,13 @@ This directory contains the Star Wars example from Cilium for learning network p
 
 This lab demonstrates network policy enforcement using both Kubernetes and Cilium network policies with a Star Wars themed application scenario.
 
+**Lab Sources:**
+This lab is adapted from Isovalent's official learning materials:
+- [Foundations Networking Lab](https://isovalent.com/labs/foundations-networking/)
+- [Cilium Getting Started Lab](https://isovalent.com/labs/cilium-getting-started/)
+
+The content has been customized for local learning and experimentation with Kubernetes network policies and Cilium advanced features.
+
 ## Files Description
 
 ### Application Deployment
