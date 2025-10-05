@@ -82,6 +82,37 @@ Cilium network policy demonstration using Star Wars themed application:
 - HTTP-level traffic filtering with Cilium policies
 - Real-time network observability with Hubble UI
 
+### `cilium-ipam-lab/`
+Cilium LoadBalancer IPAM and L2 Announcements demonstration:
+
+**Components:**
+- **Star Wars Application** - DeathStar service configured as LoadBalancer type
+- **Cilium IP Pool** - IP address management for LoadBalancer services (192.168.5.230-239)
+- **L2 Announcement Policy** - ARP/NDP announcements for external IP accessibility
+- **External Access Testing** - Connectivity validation from outside the cluster
+
+**Features:**
+- Automatic external IP assignment to LoadBalancer services
+- Layer 2 network announcements without cloud provider dependencies
+- On-premises LoadBalancer implementation using Cilium
+- ARP-based service discovery for external networks
+
+### `cilium-gateway-api-lab/`
+Cilium Gateway API implementation showcase with modern Kubernetes ingress capabilities:
+
+**Components:**
+- **Bookinfo Application** - Sample microservices application for HTTP/HTTPS routing
+- **Gateway API Resources** - GatewayClass, Gateway, HTTPRoute, and TLSRoute configurations
+- **TLS Certificate Management** - Self-signed certificates for HTTPS demonstrations
+- **Echo Services** - Traffic splitting and load balancing demonstration applications
+
+**Features:**
+- HTTP/HTTPS traffic routing with advanced L7 capabilities
+- TLS termination and passthrough modes
+- Header-based routing and traffic steering
+- Weighted traffic splitting and load balancing
+- Modern Gateway API standard implementation with Cilium
+
 ## Learning Goals
 
 This project helps you understand:
