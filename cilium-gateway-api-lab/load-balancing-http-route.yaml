@@ -15,8 +15,8 @@ spec:
         - kind: Service
           name: echo-1
           port: 8080
-          weight: 50
+          weight: 99
         - kind: Service
           name: echo-2
           port: 8090
-          weight: 50
+          weight: 1

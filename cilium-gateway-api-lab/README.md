@@ -143,6 +143,11 @@ The NGINX server configuration is held in a Kubernetes ConfigMap. Let's create i
 kubectl create configmap nginx-configmap --from-file=nginx.conf=./nginx.conf
 ```
 
+The NGINX server `index.html` is held in a Kubernetes ConfigMap. Let's create it.
+```bash
+kubectl create configmap index-html-configmap --from-file=index.html=./index.html
+```
+
 Review the NGINX server Deployment and the Service fronting it
 ```bash
 yq tls-service.yaml
@@ -218,10 +223,10 @@ First, let's deploy a sample echo application in the cluster. The application wi
 kubectl apply -f echo-servers.yaml
 ```
 
-Let's deploy the HTTPRoute with the following manifest
+Let's deploy the Gateway and HTTPRoute with the following manifest
 ```bash
+kubectl apply -f my-gateway.yaml
 kubectl apply -f load-balancing-http-route.yaml
-
 ```
 
 This Rule is essentially a simple L7 proxy route: for HTTP traffic with a path starting with /echo, forward the traffic over to the echo-1 and echo-2 Services over port 8080 and 8090 respectively. Notice the even 50/50 weighing.
@@ -239,19 +244,19 @@ curl --fail -s http://$GATEWAY/echo
 
 Notice that, in the reply, you get the name of the pod that received the query. For example
 ```
-Hostname: echo-2-5bfb6668b4-2rl4t
+"POD_NAME":"echo-2-8644f78f4b-h4fw8"
 ```
 
 Let's double check that traffic is evenly split across multiple Pods by running a loop and counting the requests
 ```bash
 for _ in {1..500}; do
-  curl -s -k "http://$GATEWAY/echo" >> curlresponses.txt;
+  curl -s http://$GATEWAY/echo | jq -r '.environment.POD_NAME' >> curlresponses.txt;
 done
 ```
 
 Verify that the responses have been (more or less) evenly spread.
 ```bash
-grep -o "Hostname: echo-." curlresponses.txt | sort | uniq -c
+cat curlresponses.txt | sort | uniq -c
 ```
 
 This time, we will be applying a different weight. Replace the weights from 50 for both echo-1 and echo-2 to 99 for echo-1 and 1 for echo-2.
@@ -259,11 +264,11 @@ This time, we will be applying a different weight. Replace the weights from 50 f
 Apply it again and let's run another loop and count the replies again, with the following command
 ```bash
 for _ in {1..500}; do
-  curl -s -k "http://$GATEWAY/echo" >> curlresponses991.txt;
+  curl -s http://$GATEWAY/echo | jq -r '.environment.POD_NAME' >> curlresponses991.txt;
 done
 ```
 
 Verify that the responses are spread with about 99% of them to echo-1 and about 1% of them to echo-2
 ```bash
-grep -o "Hostname: echo-." curlresponses991.txt | sort | uniq -c
+cat curlresponses991.txt | sort | uniq -c
 ```
