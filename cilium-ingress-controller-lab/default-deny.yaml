@@ -1,0 +1,55 @@
+# This policy implements a default-deny egress policy with essential exceptions.
+#
+# What it does:
+# 1. Blocks ALL outgoing traffic from pods by default
+# 2. EXCEPT: Traffic to cluster endpoints (internal pod-to-pod communication)
+# 3. EXCEPT: DNS queries to kube-dns (essential for service discovery)
+#
+# Why these exceptions are needed:
+# - "cluster" entity: Allows internal communication between pods (API calls, service mesh, etc.)
+# - DNS to kube-dns: Without DNS, pods cannot resolve service names to IPs
+#
+# Scope:
+# - Applies to ALL namespaces EXCEPT kube-system (to avoid breaking cluster components)
+# - Only controls EGRESS traffic (outgoing from pods)
+# - Does NOT affect INGRESS traffic (incoming to pods)
+#
+# Security impact:
+# - Prevents pods from making unauthorized external connections (internet, external APIs)
+# - Forces explicit allow policies for any external communication
+# - Implements "Zero Trust" model: deny by default, allow by exception
+#
+# Use case: Foundation policy for a secure cluster
+# - Start with this default-deny
+# - Add specific allow policies (like allow-ingress-cluster.yaml, allow-ingress-cidr.yaml)
+# - Each workload gets only the network access it needs (least privilege principle)
+#
+# Example blocked traffic: Pods trying to connect to external APIs, internet downloads, etc.
+# Example allowed traffic: Pod-to-pod communication, DNS resolution, traffic explicitly allowed by other policies
+---
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: "default-deny"
+spec:
+  description: "Block all the traffic (except internal and DNS) by default"
+  egress:
+    - toEntities:
+        - cluster
+    - toEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: UDP
+          rules:
+            dns:
+              - matchPattern: '*'
+  endpointSelector:
+    matchExpressions:
+      - key: io.kubernetes.pod.namespace
+        operator: NotIn
+        values:
+          - kube-system

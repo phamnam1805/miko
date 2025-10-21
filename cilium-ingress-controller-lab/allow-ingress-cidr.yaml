@@ -1,0 +1,29 @@
+# This policy controls INCOMING traffic to the Ingress Controller.
+# 
+# Why it allows traffic from a specific IP:
+# 1. The policy targets the Ingress Controller (reserved:ingress identity)
+# 2. It permits ingress traffic ONLY from the specified CIDR (A.B.C.D/32)
+# 3. This acts as an IP allowlist - only traffic from this source IP can reach the Ingress Controller
+# 4. All other IPs are implicitly denied (when combined with a default-deny policy)
+# 
+# Use case: Restrict access to your cluster's ingress to specific clients, such as:
+# - Corporate network IPs
+# - Monitoring systems
+# - Trusted external services
+# - Bastion hosts or jump servers
+#
+# Note: /32 means a single IP address. Use /24, /16, etc. for IP ranges.
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: "allow-cidr"
+spec:
+  description: "Allow all the traffic originating from a specific CIDR"
+  endpointSelector:
+    matchExpressions:
+      - key: reserved:ingress
+        operator: Exists
+  ingress:
+    - fromCIDRSet:
+        - cidr: A.B.C.D/32

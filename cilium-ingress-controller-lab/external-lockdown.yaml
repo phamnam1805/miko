@@ -1,0 +1,72 @@
+# Policy 1: External Lockdown (Cluster-wide)
+# This is a cluster-wide default-deny policy for INGRESS traffic from external sources.
+#
+# What it does:
+# - Blocks ALL incoming traffic from outside the cluster (world entity)
+# - ONLY allows incoming traffic from within the cluster (cluster entity)
+# - Applies to ALL pods in ALL namespaces (empty endpointSelector: {})
+#
+# Traffic behavior:
+# ✅ ALLOWED: Pod-to-pod communication within cluster
+# ❌ BLOCKED: Traffic from internet, external networks, LoadBalancer, NodePort (world entity)
+# ❌ BLOCKED: Traffic from Ingress Controller (unless explicitly allowed by other policies)
+#
+# Why this is needed:
+# - Implements perimeter security: Nothing from outside can reach your pods
+# - Forces all external traffic to go through controlled entry points (Ingress Controller)
+# - Prevents direct access to backend services from external sources
+#
+# Important: This will block legitimate external traffic unless you create exceptions
+# (see Policy 2 below for an example exception)
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: "external-lockdown"
+spec:
+  description: "Block all the traffic originating from outside of the cluster"
+  endpointSelector: {}
+  ingress:
+    - fromEntities:
+        - cluster
+---
+# Policy 2: Hubble Exception (Namespace-specific)
+# This creates an exception to the external-lockdown policy for Hubble UI access.
+#
+# What it does:
+# - Allows incoming traffic from "world" entity (external sources) to Hubble Relay
+# - Only applies to hubble-relay pods in kube-system namespace
+# - Allows access on port 4245/TCP (Hubble Relay API port)
+#
+# Why this exception is needed:
+# - Hubble UI needs to be accessible from outside the cluster for monitoring
+# - Without this, the external-lockdown policy would block access to Hubble UI
+# - This is a controlled exception: only specific pod, specific port, specific namespace
+#
+# Security note:
+# - This is safe because Hubble is a read-only observability tool
+# - You should add authentication/authorization for production environments
+# - Consider using CIDR restrictions instead of "world" for tighter security
+#
+# Pattern: This shows how to create exceptions to default-deny policies
+# - Use namespace-specific policies to override cluster-wide policies
+# - Use specific selectors (labels) and port restrictions
+# - Grant minimum required access (principle of least privilege)
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: "hubble-world"
+  namespace: "kube-system"
+spec:
+  description: "Allow access to Hubble from outside"
+  endpointSelector:
+    matchLabels:
+      k8s-app: hubble-relay
+  ingress:
+    - fromEntities:
+        - world
+    - toPorts:
+        - ports:
+            - port: '4245'
+              protocol: TCP

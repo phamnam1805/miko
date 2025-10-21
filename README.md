@@ -106,12 +106,25 @@ Cilium Gateway API implementation showcase with modern Kubernetes ingress capabi
 - **TLS Certificate Management** - Self-signed certificates for HTTPS demonstrations
 - **Echo Services** - Traffic splitting and load balancing demonstration applications
 
+### `cilium-ingress-controller-lab/`
+Comprehensive Cilium Ingress Controller demonstration with real-world ingress patterns:
+
+**Components:**
+- **Bookinfo Application** - HTTP/HTTPS ingress with Istio sample application
+- **GCP Microservices Demo** - gRPC ingress with Google's Hipster Shop application
+- **TLS Certificate Management** - Self-signed certificates for HTTPS/TLS demonstrations
+- **Network Policy Integration** - CIDR-based and entity-based access control policies
+- **Gateway API Migration** - Ingress2Gateway tool for API migration
+
 **Features:**
-- HTTP/HTTPS traffic routing with advanced L7 capabilities
-- TLS termination and passthrough modes
-- Header-based routing and traffic steering
-- Weighted traffic splitting and load balancing
-- Modern Gateway API standard implementation with Cilium
+- HTTP and HTTPS ingress with path-based routing
+- gRPC ingress with TLS termination
+- TLS certificate management for secure ingress traffic
+- Network policy enforcement at ingress identity level
+- CIDR-based access control from specific IP ranges
+- Entity-based policies (cluster, world, ingress identities)
+- Migration from Ingress API to Gateway API standard
+- Deep integration with Cilium CNI for eBPF-based security
 
 ## Learning Goals
 

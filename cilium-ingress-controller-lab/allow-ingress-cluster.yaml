@@ -1,0 +1,33 @@
+# This policy controls OUTGOING traffic from the Ingress Controller.
+#
+# Why it allows traffic to the cluster:
+# 1. The policy targets the Ingress Controller (reserved:ingress identity)
+# 2. It permits egress traffic to ALL endpoints with the "cluster" identity
+# 3. This allows the Ingress Controller to forward traffic to backend services
+# 4. Without this policy, the Ingress Controller cannot reach any pods in the cluster
+#
+# How it works:
+# - The "cluster" entity includes all managed endpoints in the cluster
+# - When a request comes to the Ingress Controller, it needs to proxy/forward it to backend pods
+# - This policy enables that forwarding capability
+#
+# Use case: Essential policy for Ingress Controller to function properly
+# - Allows Ingress → Backend Service communication
+# - Enables the reverse proxy behavior of the Ingress Controller
+# - Should be combined with ingress policies (like allow-ingress-cidr.yaml) for complete traffic control
+#
+# Traffic flow: External Client → [CIDR Policy] → Ingress Controller → [THIS Policy] → Backend Pods
+---
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: allow-ingress-cluster
+spec:
+  description: "Allow all the egress traffic from reserved ingress identity to any endpoints in the cluster"
+  endpointSelector:
+    matchExpressions:
+    - key: reserved:ingress
+      operator: Exists
+  egress:
+  - toEntities:
+    - cluster
