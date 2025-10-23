@@ -1,0 +1,17 @@
+apiVersion: isovalent.com/v1
+kind: IsovalentEgressGatewayPolicy
+metadata:
+  name: outpost-ha
+spec:
+  destinationCIDRs:
+  - "172.18.0.0/16"
+  selectors:
+  - podSelector:
+      matchLabels:
+        org: alliance
+  egressCIDRs:
+    - "172.18.0.84/31"
+  egressGroups:
+    - nodeSelector:
+        matchLabels:
+          egress-gw: 'true'
